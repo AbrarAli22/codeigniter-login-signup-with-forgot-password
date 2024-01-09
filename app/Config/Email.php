@@ -6,7 +6,7 @@ use CodeIgniter\Config\BaseConfig;
 
 class Email extends BaseConfig
 {
-    public string $fromEmail  = 'juttabrarali1@gmail.com';
+    public string $fromEmail  = '';//write your mail rom you want to send mail 
     public string $fromName   = 'Test Project';
     public string $recipients = '';
 
@@ -28,17 +28,17 @@ class Email extends BaseConfig
     /**
      * SMTP Server Hostname
      */
-    public string $SMTPHost = 'smtp.gmail.com';
+    public string $SMTPHost = 'smtp.gmail.com'; //define your host smtp for php mailer 
 
     /**
      * SMTP Username
      */
-    public string $SMTPUser = 'jibrarali1@gmail.com';
+    public string $SMTPUser = '';
 
     /**
      * SMTP Password
      */
-    public string $SMTPPass = 'auougxjwgfmiztnw';
+    public string $SMTPPass = '';
 
     /**
      * SMTP Port
