@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Admin;
 
 use App\Models\AdminModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use Firebase\JWT\JWT;
+
 class AdminController extends ResourceController
 {
     public function adminsignup()
@@ -56,7 +57,7 @@ class AdminController extends ResourceController
                             "message" => "account has not created!"
                         ];
                     }
-                }else{
+                } else {
                     $response = [
                         "status" => 400,
                         "error" => true,
@@ -147,43 +148,44 @@ class AdminController extends ResourceController
                     "message" => "Account not found creat account first",
                 ];
             } else {
-                $otp = mt_rand(100000, 999999);;
-                
+                $otp = mt_rand(100000, 999999);
+                ;
+
                 $data = [
                     'reset_code' => $otp,
                     'reset_code_expire' => date('Y-m-d H:i:s', strtotime('+10 min')),
                 ];
-                $query = $Model->set($data)->where('admin_email',$email)->update();         
-                if($query){
-                $emailService = \Config\Services::email();
-                $emailService->setTo($user['admin_email']);
-                $emailService->setSubject('Password Reset');
-                $emailService->setMessage("Click the following link to reset your password: $otp");
-                if (!$emailService->send()) {
+                $query = $Model->set($data)->where('admin_email', $email)->update();
+                if ($query) {
+                    $emailService = \Config\Services::email();
+                    $emailService->setTo($user['admin_email']);
+                    $emailService->setSubject('Password Reset');
+                    $emailService->setMessage("Click the following link to reset your password: $otp");
+                    if (!$emailService->send()) {
+                        $response = [
+                            "status" => 400,
+                            "error" => true,
+                            "message" => $emailService->printDebugger(),
+
+                        ];
+                    } else {
+                        $response = [
+                            "status" => 200,
+                            "error" => false,
+                            "message" => "Tokken is sent to" . $email . " successfully.",
+                            "data" => [
+                                "tokken" => $otp
+                            ],
+                        ];
+
+                    }
+                } else {
                     $response = [
                         "status" => 400,
                         "error" => true,
-                        "message" => $emailService->printDebugger(),
-
+                        "message" => "query not runs"
                     ];
-                } else {
-                    $response = [
-                        "status" => 200,
-                        "error" => false,
-                        "message" => "Tokken is sent to" . $email . " successfully.",
-                        "data" => [
-                            "tokken" => $otp
-                        ],
-                    ];
-
                 }
-            }else{
-                $response=[
-                    "status"=>400,
-                    "error"=>true,
-                    "message"=>"query not runs"
-                ];
-            }
             }
         }
         return $this->respondCreated($response);

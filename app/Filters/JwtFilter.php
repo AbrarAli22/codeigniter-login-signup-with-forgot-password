@@ -25,6 +25,7 @@ class JwtFilter implements FilterInterface
      *
      * @return RequestInterface|ResponseInterface|string|void
      */
+    // creat the alias of this class in config/filter.php folder 
     public function before(RequestInterface $request, $arguments = null)
     {
         $header=$request->getHeaderLine("Authorization");
